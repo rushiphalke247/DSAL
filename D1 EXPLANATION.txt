@@ -1,0 +1,28 @@
+1. `#include <iostream>`: This line includes the iostream library in the program which provides functionality for input/output operations.
+
+2. `using namespace std;`: This line allows us to use names for objects and variables from the standard library.
+
+3. `void con_obst(void);` and `void print(int, int);`: These lines declare two functions, `con_obst` and `print`, which will be defined later in the program.
+
+4. `float a[20], b[20], wt[20][20], c[20][20];`: This line declares four arrays. `a` and `b` are one-dimensional arrays of size 20, and `wt` and `c` are two-dimensional arrays of size 20x20.
+
+5. `int r[20][20], n;`: This line declares a two-dimensional array `r` of size 20x20 and an integer `n`.
+
+6. `int main() { ... }`: This is the main function where the program starts. It does the following:
+   - Prints a message to the console.
+   - Asks the user to enter the number of nodes and stores it in `n`.
+   - Asks the user to enter the probabilities for successful search and stores them in array `a`.
+   - Asks the user to enter the probabilities for unsuccessful search and stores them in array `b`.
+   - Calls the `con_obst` function.
+   - Calls the `print` function with arguments 0 and `n`.
+
+7. `void con_obst(void) { ... }`: This function calculates the optimal binary search tree (OBST). It does the following:
+   - Initializes the arrays `c`, `r`, and `wt`.
+   - Calculates the weight of each subtree and stores it in `wt`.
+   - Finds the root of each subtree that minimizes the cost and stores it in `r`.
+   - Calculates the cost of each subtree and stores it in `c`.
+   - Prints the optimal BST, its weight, cost, and root.
+
+8. `void print(int l1, int r1) { ... }`: This function prints the left and right children of each node in the OBST. It does this recursively for each node until all nodes have been printed.
+
+This program is used to find the optimal binary search tree (OBST) given the probabilities of successful and unsuccessful searches. The OBST is the binary search tree for which the average number of comparisons for a search is the smallest. The program asks the user to input the probabilities and then calculates and prints the OBST. It's a common problem in data structure and algorithm courses. Hope this helps! Let me know if you have any other questions.

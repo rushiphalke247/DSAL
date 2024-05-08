@@ -1,0 +1,130 @@
+It's a simple student information system that uses file operations to manage student records.
+
+```cpp
+#include <iostream> 
+#include <fstream> 
+#include <cstring> 
+using namespace std;
+```
+These lines include the necessary libraries for the program. `iostream` is for input/output operations, `fstream` is for file operations, and `cstring` is for string manipulation functions. `using namespace std;` allows us to use standard library functions without prefixing them with `std::`.
+
+```cpp
+struct Student { 
+    int rollNumber; 
+    char name[50]; 
+    char division; 
+    char address[100]; 
+};
+```
+This defines a structure `Student` which represents a student. Each student has a roll number (`rollNumber`), a name (`name`), a division (`division`), and an address (`address`).
+
+```cpp
+void addStudent() { 
+    ofstream outFile("students.dat", ios::binary | ios::app); 
+    Student student; 
+    cout << "Enter Roll Number: "; 
+    cin >> student.rollNumber; 
+    cin.ignore(); 
+    cout << "Enter Name: "; 
+    cin.getline(student.name, 50); 
+    cout << "Enter Division: "; 
+    cin >> student.division; 
+    cin.ignore(); 
+    cout << "Enter Address: "; 
+    cin.getline(student.address, 100); 
+    outFile.write(reinterpret_cast<char*>(&student), sizeof(Student)); 
+    outFile.close(); 
+}
+```
+The `addStudent` function adds a new student record to the file. It prompts the user to enter the student's details, writes them to the file, and then closes the file.
+
+```cpp
+void deleteStudent(int rollNumber) { 
+    ifstream inFile("students.dat", ios::binary); 
+    ofstream outFile("temp.dat", ios::binary); 
+    Student student; 
+    bool found = false; 
+    while (inFile.read(reinterpret_cast<char*>(&student), sizeof(Student))) { 
+        if (student.rollNumber != rollNumber) { 
+            outFile.write(reinterpret_cast<char*>(&student), sizeof(Student)); 
+        }
+        else {
+            found = true; 
+        } 
+    }
+    inFile.close(); 
+    outFile.close(); 
+    if (found) { 
+        remove("students.dat"); 
+        rename("temp.dat", "students.dat"); 
+        cout << "Student record deleted successfully." << endl; 
+    }
+    else {
+        remove("temp.dat");
+        cout << "Student record not found." << endl; 
+    } 
+}
+```
+The `deleteStudent` function deletes a student record from the file. It reads the records from the file, writes all records except the one to be deleted to a temporary file, and then replaces the original file with the temporary file. If the record to be deleted is not found, it deletes the temporary file.
+
+```cpp
+void displayStudent(int rollNumber) { 
+    ifstream inFile("students.dat", ios::binary); 
+    Student student; 
+    bool found = false; 
+    while (inFile.read(reinterpret_cast<char*>(&student), sizeof(Student))) { 
+        if (student.rollNumber == rollNumber) { 
+            cout << "Roll Number: " << student.rollNumber << endl; 
+            cout << "Name: " << student.name << endl; 
+            cout << "Division: " << student.division << endl; 
+            cout << "Address: " << student.address << endl; 
+            found = true; 
+            break; 
+        } 
+    }
+    inFile.close(); 
+    if (!found) { 
+        cout << "Student record not found." << endl; 
+    } 
+}
+```
+The `displayStudent` function displays a student record from the file. It reads the records from the file until it finds the one to be displayed. If the record is not found, it displays an error message.
+
+```cpp
+int main() { 
+    int choice; 
+    int rollNumber; 
+    do { 
+        cout << "----- Student Information System -----" << endl; 
+        cout << "1. Add Student" << endl; 
+        cout << "2. Delete Student" << endl; 
+        cout << "3. Display Student" << endl; 
+        cout << "4. Quit" << endl; 
+        cout << "Enter your choice: "; 
+        cin >> choice; 
+        switch (choice) { 
+            case 1: 
+                addStudent(); 
+                break; 
+            case 2: 
+                cout << "Enter Roll Number of student to delete: "; 
+                cin >> rollNumber; 
+                deleteStudent(rollNumber); 
+                break; 
+            case 3: 
+                cout << "Enter Roll Number of student to display: "; 
+                cin >> rollNumber; 
+                displayStudent(rollNumber); 
+                break; 
+            case 4: 
+                break; 
+            default:
+                cout << "Invalid choice. Please try again." << endl; 
+                break; 
+        }
+        cout << endl; 
+    } while (choice != 4); 
+    return 0; 
+}
+```
+The `main` function is the entry point of the program. It displays a menu to the user and performs the chosen operation. The operations include adding a student (option 1), deleting a student (option 2), displaying a student (option 3), and exiting the program (option 4). If the user enters an invalid option, it displays an error message. The loop continues until the user chooses to exit. The `main` function returns 0 to indicate successful execution of the program.
