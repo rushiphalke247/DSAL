@@ -1,0 +1,151 @@
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+```
+These lines include the necessary header files for input/output operations (`iostream`) and the queue data structure (`queue`). The `using namespace std;` line allows us to use the standard namespace without having to write `std::` before every function or class from the standard library.
+
+```cpp
+int adj_mat[50][50] = {0, 0};
+int visited[50] = {0};
+```
+These lines declare two arrays:
+- `adj_mat`: a 2D array of size 50x50, representing the adjacency matrix for the graph. It is initialized with zeros, indicating no edges initially.
+- `visited`: an array of size 50, used to keep track of visited vertices during graph traversal. It is initialized with zeros, indicating all vertices are initially unvisited.
+
+```cpp
+void dfs(int s, int n, string arr[])
+{
+    visited[s] = 1;
+    cout << arr[s] << " ";
+    for (int i = 0; i < n; i++)
+    {
+        if (adj_mat[s][i] && !visited[i])
+            dfs(i, n, arr);
+    }
+}
+```
+This function `dfs` performs a Depth-First Search (DFS) traversal on the graph. It takes the following arguments:
+- `s`: the starting vertex for the DFS traversal.
+- `n`: the total number of vertices in the graph.
+- `arr`: an array of strings representing the labels (e.g., city names) of the vertices.
+
+Here's what the function does:
+1. It marks the current vertex `s` as visited by setting `visited[s]` to 1.
+2. It prints the label of the current vertex (`arr[s]`).
+3. It enters a loop that iterates over all vertices `i` in the graph.
+4. For each vertex `i`, it checks if there is an edge between `s` and `i` (`adj_mat[s][i]`), and if `i` is not yet visited (`!visited[i]`).
+5. If both conditions are true, it recursively calls `dfs` with `i` as the new starting vertex.
+
+```cpp
+void bfs(int s, int n, string arr[])
+{
+    bool visited[n];
+    for (int i = 0; i < n; i++)
+        visited[i] = false;
+    int v;
+    queue<int> bfsq;
+    if (!visited[s])
+    {
+        cout << arr[s] << " ";
+        bfsq.push(s);
+        visited[s] = true;
+        while (!bfsq.empty())
+        {
+            v = bfsq.front();
+            for (int i = 0; i < n; i++)
+            {
+                if (adj_mat[v][i] && !visited[i])
+                {
+                    cout << arr[i] << " ";
+                    visited[i] = true;
+                    bfsq.push(i);
+                }
+            }
+            bfsq.pop();
+        }
+    }
+}
+```
+This function `bfs` performs a Breadth-First Search (BFS) traversal on the graph. It takes the following arguments:
+- `s`: the starting vertex for the BFS traversal.
+- `n`: the total number of vertices in the graph.
+- `arr`: an array of strings representing the labels (e.g., city names) of the vertices.
+
+Here's what the function does:
+1. It creates a boolean array `visited` of size `n` and initializes all elements to `false`, indicating all vertices are initially unvisited.
+2. It creates a queue `bfsq` to store the vertices during the BFS traversal.
+3. If the starting vertex `s` is not visited, it performs the following steps:
+   - It prints the label of the starting vertex (`arr[s]`).
+   - It pushes the starting vertex `s` into the queue `bfsq`.
+   - It marks the starting vertex `s` as visited by setting `visited[s]` to `true`.
+   - It enters a loop that continues until the queue `bfsq` is empty.
+   - In the loop, it performs the following steps:
+     - It dequeues a vertex `v` from the front of the queue.
+     - It iterates over all vertices `i` in the graph.
+     - If there is an edge between `v` and `i` (`adj_mat[v][i]`), and `i` is not yet visited (`!visited[i]`), it performs the following steps:
+       - It prints the label of the vertex `i` (`arr[i]`).
+       - It marks the vertex `i` as visited by setting `visited[i]` to `true`.
+       - It enqueues the vertex `i` into the queue `bfsq`.
+     - After processing all neighbors of `v`, it dequeues `v` from the front of the queue.
+
+```cpp
+int main()
+{
+    cout << "Enter no. of cities: ";
+    int n, u;
+    cin >> n;
+    string cities[n];
+    for (int i = 0; i < n; i++)
+    {
+        cout << "Enter city #" << i << " (Airport Code): ";
+        cin >> cities[i];
+    }
+    cout << "\nYour cities are: " << endl;
+    for (int i = 0; i < n; i++)
+        cout << "city #" << i << ": " << cities[i] << endl;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            cout << "Enter distance between " << cities[i] << " and " << cities[j] << " : ";
+            cin >> adj_mat[i][j];
+            adj_mat[j][i] = adj_mat[i][j];
+        }
+    }
+    cout << endl;
+    for (int i = 0; i < n; i++)
+        cout << "\t" << cities[i] << "\t";
+    for (int i = 0; i < n; i++)
+    {
+        cout << "\n"
+             << cities[i];
+        for (int j = 0; j < n; j++)
+            cout << "\t" << adj_mat[i][j] << "\t";
+        cout << endl;
+    }
+    cout << "Enter Starting Vertex: ";
+    cin >> u;
+    cout << "DFS: ";
+    dfs(u, n, cities);
+    cout << endl;
+    cout << "BFS: ";
+    bfs(u, n, cities);
+    return 0;
+}
+```
+This is the `main` function, which is the entry point of the program. Here's what it does:
+
+1. It prompts the user to enter the number of cities and stores it in the variable `n`.
+2. It creates an array `cities` of size `n` to store the city names (airport codes).
+3. It prompts the user to enter the airport codes for each city and stores them in the `cities` array.
+4. It prints the list of cities entered by the user.
+5. It prompts the user to enter the distance between each pair of cities and stores the distances in the `adj_mat` array, which represents the adjacency matrix of the graph.
+6. It prints the adjacency matrix with city names as row and column headers.
+7. It prompts the user to enter the starting vertex (city) and stores it in the variable `u`.
+8. It prints the message "DFS: " and calls the `dfs` function with `u` as the starting vertex, `n` as the number of vertices, and `cities` as the array of city names.
+9. It prints a newline character.
+10. It prints the message "BFS: " and calls the `bfs` function with `u` as the starting vertex, `n` as the number of vertices, and `cities` as the array of city names.
+11. Finally, it returns 0 to indicate successful program execution.
+
+The program allows the user to create a graph representing cities and their distances. It then performs Depth-First Search (DFS) and Breadth-First Search (BFS) traversals on the graph, starting from a user-specified city, and prints the order in which the cities are visited during each traversal.

@@ -1,0 +1,128 @@
+```python
+import array as arr
+```
+This line imports the `array` module in Python and gives it the alias `arr`. The `array` module provides a way to store and work with arrays of a specific data type efficiently.
+
+```python
+def acceptData(n):
+    l1 = []
+    while(len(l1) < n):
+        t = (input("Enter telephone nos of client:"))
+        if(len(t) == 10) and (t.isdigit()):
+            l1.append(t)
+        else:
+            print("\nvaild telephone no:")
+    return(l1)
+```
+This is a function called `acceptData` that takes a number `n` as input. It creates an empty list `l1`. Then, it repeatedly asks the user to enter a telephone number until `n` telephone numbers are entered. If the entered telephone number is 10 digits long and contains only digits, it is added to the list `l1`. If the entered telephone number is not valid, it prints "vaild telephone no:" and asks for another number. Finally, the function returns the list `l1` containing all the valid telephone numbers.
+
+```python
+#example of linear probing
+#n=int(input("Enter nos of clients:"))
+#l1=acceptData(n)
+l1 = [1234567890, 1234567891, 1234567892, 1234567885, 1234567887, 1234567871, 1234567876, 1234567877, 1234567899, 1234567898]
+```
+Instead of calling the `acceptData` function to get telephone numbers from the user, the program directly assigns a list of telephone numbers to the variable `l1`.
+
+```python
+def linearProbing(l1):
+    n = len(l1)
+    t1 = []
+    for i in range(0, n):
+        t1.append(0)
+    coll = 0
+    ht = arr.array('i', t1)
+    for i in l1:
+        t = i % n
+        coll = 1
+        if(ht[t] == 0):
+            ht[t] = i
+            print('inserted key:', i, ' at:', t, "with complexity:", "O(", str(coll), ")")
+            coll = 0
+        else:
+            print("Collision at index: ", t, " for ", i)
+            print("Use probing:")
+            cnt = t
+            while(1):
+                cnt = (cnt + 1) % n
+                if(cnt == t):
+                    print("Collision cannot be resolved or overflow")
+                    break
+                else:
+                    if(ht[cnt] == 0):
+                        ht[cnt] = i
+                        print('inserted key:', i, ' at:', cnt, "with complexity:", "O(", str(coll + 1), ")")
+                        coll = 0
+                        break
+                    else:
+                        coll += 1
+    return(ht)
+```
+This is the `linearProbing` function that implements the linear probing technique for hash table collision resolution. Here's what it does:
+
+1. It calculates the size of the input list `l1` and creates an array `ht` of the same size, initially filled with 0s.
+2. For each telephone number `i` in `l1`, it calculates the hash value `t` by taking the remainder of `i` divided by `n` (the size of `l1`).
+3. If the index `t` in the `ht` array is 0 (empty), it inserts the telephone number `i` at that index and prints the insertion message with complexity O(1).
+4. If the index `t` is already occupied (collision), it prints a collision message and uses linear probing to find the next available index.
+5. In linear probing, it starts from the next index `(t + 1) % n` and keeps incrementing the index until an empty slot is found or it reaches the starting index `t` again (indicating that the hash table is full).
+6. If an empty slot is found at index `cnt`, it inserts the telephone number `i` at that index and prints the insertion message with complexity O(coll + 1), where `coll` is the number of probes required.
+7. If no empty slot is found (hash table is full), it prints a "Collision cannot be resolved or overflow" message.
+8. Finally, it returns the `ht` array (the hash table).
+
+```python
+ht = linearProbing(l1)
+print(ht)
+```
+This line calls the `linearProbing` function with the list `l1` as input and stores the resulting hash table in the variable `ht`. Then, it prints the `ht` array (the hash table).
+
+```python
+def search(key, ht):
+    print("_" * 60)
+    print("Linear Probing:")
+    coll = 1
+    n = len(ht)
+    t = key % n
+    if (ht[t] == key):
+        print("_" * 60)
+        print("Telephone no found at", t, "Complexity: O(1)", " key:", key)
+    else:
+        print("Search Using Linear Probing")
+        coll = 1
+        cnt = t
+        while (1):
+            cnt = (cnt + 1) % n
+            if (cnt == t):
+                print("_" * 60)
+                print("Telephone nos not found:", key)
+                print("Telephone not found Complexity:O(", str(coll + 1), ") key:", key)
+                break
+            else:
+                if (ht[cnt] == key):
+                    print("_" * 60)
+                    print("Telephone no found at", cnt, "Complexity:O(", str(coll + 1), ") key:", key)
+                    break
+                else:
+                    coll += 1
+```
+This is the `search` function that searches for a given telephone number `key` in the hash table `ht`. Here's how it works:
+
+1. It prints a separator line of underscores and the text "Linear Probing:".
+2. It initializes a variable `coll` to 1, which will keep track of the number of probes required.
+3. It calculates the size of the hash table `ht` and stores it in the variable `n`.
+4. It calculates the hash value `t` by taking the remainder of `key` divided by `n`.
+5. If the value at index `t` in the `ht` array is equal to `key`, it means the telephone number is found, and it prints the message "Telephone no found at `t` Complexity: O(1)" along with the key.
+6. If the value at index `t` is not equal to `key`, it means the telephone number is not found at the initial hash index, and it needs to use linear probing.
+7. It initializes a variable `cnt` to `t` and enters a loop.
+8. In the loop, it increments `cnt` by 1 and takes the modulus with `n` to wrap around if it exceeds the size of the hash table.
+9. If `cnt` becomes equal to the initial `t` value, it means the entire hash table has been probed, and the telephone number is not found. It prints the message "Telephone nos not found: `key`" and the complexity O(coll + 1), where `coll` is the number of probes required.
+10. If the value at index `cnt` in the `ht` array is equal to `key`, it means the telephone number is found, and it prints the message "Telephone no found at `cnt` Complexity: O(coll + 1)" along with the key.
+11. If the value at index `cnt` is not equal to `key`, it increments `coll` by 1 and continues the loop.
+
+```python
+search(1234567891, ht)
+search(1234567871, ht)
+search(1234567870, ht)
+```
+These are the calls to the `search` function to search for the telephone numbers `1234567891`, `1234567871`, and `1234567870` in the hash table `ht`.
+
+The program demonstrates the implementation of linear probing for hash table collision resolution and provides functions to insert and search telephone numbers in the hash table.
