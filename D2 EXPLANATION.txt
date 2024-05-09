@@ -1,0 +1,68 @@
+Sure, let me explain the program line by line in simple language:
+
+```cpp
+#include<iostream>
+#include<string.h>
+```
+These lines include the necessary header files `iostream` for input/output operations and `string.h` for string manipulation functions.
+
+```cpp
+using namespace std;
+```
+This line allows the program to use names from the `std` namespace without having to write `std::` before each name.
+
+```cpp
+struct node
+{
+    char k[20];
+    char m[20];
+    class node *left;
+    class node *right;
+};
+```
+This defines a structure `node` that represents a node in the binary search tree. Each node has two character arrays `k` and `m` to store the keyword and its meaning, respectively, and two pointers `left` and `right` to point to the left and right child nodes.
+
+```cpp
+class dict
+{
+public:
+    node *root;
+    void create();
+    void disp(node *);
+    void insert(node *root, node *temp);
+    int search(node *, char []);
+    int update(node *, char []);
+    node* del(node *, char []);
+    node *min(node *);
+};
+```
+This defines a class `dict` that represents the dictionary. It has a pointer `root` that points to the root node of the binary search tree, and several member functions to perform operations on the dictionary, such as creating, displaying, inserting, searching, updating, and deleting nodes.
+
+The `create()` function prompts the user to enter keywords and their meanings, creates new nodes, and inserts them into the binary search tree using the `insert()` function.
+
+The `insert()` function recursively inserts a new node into the binary search tree based on the keyword.
+
+The `disp()` function recursively traverses the binary search tree in-order and displays the keywords and their meanings.
+
+The `search()` function recursively searches for a keyword in the binary search tree and returns 1 if found, 0 otherwise.
+
+The `update()` function searches for a keyword in the binary search tree and prompts the user to enter a new meaning for it.
+
+The `del()` function recursively deletes a node with the given keyword from the binary search tree.
+
+The `min()` function finds the node with the minimum keyword value in the right subtree of a given node.
+
+```cpp
+int main()
+{
+    int ch, loop = 1;
+    dict d;
+    d.root = NULL;
+    // code inside main function
+}
+```
+This is the main function where the program execution starts. It creates an object `d` of the `dict` class and initializes its root pointer to `NULL`.
+
+The rest of the code inside the `main()` function is a loop that displays a menu of options and performs the corresponding operation based on the user's choice. The loop continues until the user chooses to exit.
+
+Overall, this program implements a dictionary using a binary search tree data structure. It allows users to create a dictionary by inserting keywords and their meanings, display the dictionary, search for a keyword, update the meaning of a keyword, and delete a keyword from the dictionary.
